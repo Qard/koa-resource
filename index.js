@@ -23,7 +23,7 @@ function resource (controller) {
   if (controller.before) {
     // ensure before list is an array
     var befores = controller.before || []
-    if ( ! Array.isArray(before)) {
+    if ( ! Array.isArray(befores)) {
       befores = [befores]
     }
 
