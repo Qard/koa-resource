@@ -1,0 +1,14 @@
+{
+  "name": "koa-resource",
+  "version": "0.0.1",
+  "description": "Resource routing for koa, similar to Rails resources",
+  "main": "index.js",
+  "author": "Stephen Belanger <admin@stephenbelanger.com>",
+  "license": "MIT",
+  "dependencies": {
+    "koa-route": "~1.0.2"
+  },
+  "peerDependencies": {
+    "koa": "0.x"
+  }
+}
