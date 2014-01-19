@@ -1,6 +1,6 @@
 # koa-resource
 
-koa-resource provides a similar pattern to what Rails resource apps use for matching functions to routes. It returns a self-contained koa app that can be mounted wherever you like. It also includes basic before and after hooks to manipulate any request within the controller and an optional function to add custom routes before returning the built koa app.
+koa-resource provides a similar pattern to what Rails resources use for matching functions to routes. It returns a self-contained koa app that can be mounted wherever you like. It also includes basic before and after hooks to manipulate any request within the controller and an optional function to add custom routes before returning the built koa app.
 
 ## Install
 
