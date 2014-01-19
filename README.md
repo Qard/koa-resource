@@ -25,7 +25,7 @@ koa-resource provides a similar pattern to what Rails resource apps use for matc
 ## Reference table
 
 | HTTP Verb | Path      | Action  |
-| --------- |:---------:| -------:|
+| --------- | --------- | ------- |
 | GET       | /         | index   |
 | GET       | /new      | new     |
 | POST      | /         | create  |
