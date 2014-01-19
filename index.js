@@ -22,7 +22,7 @@ function resource (controller) {
   // before hook
   if (controller.before) {
     // ensure before list is an array
-    var befores = controller.before
+    var befores = controller.before || []
     if ( ! Array.isArray(before)) {
       befores = [befores]
     }
@@ -42,8 +42,10 @@ function resource (controller) {
     var fn = controller[name]
 
     // push onto the middleware stack
-    assert(isLegal(fn), 'The function must be a GeneratorFunction.')
-    list.push(handler(route, fn))
+    if (fn) {
+      assert(isLegal(fn), 'The function must be a GeneratorFunction.')
+      list.push(handler(route, fn))
+    }
   })
 
   // compose a single middleware for the list
