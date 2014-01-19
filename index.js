@@ -1,27 +1,57 @@
+var compose = require('koa-compose')
+var assert = require('assert')
 var _ = require('koa-route')
-var koa = require('koa')
 
-module.exports = function (c, fn) {
-  var app = koa()
+module.exports = resource
 
-  // Attach before and after behaviours
-  if (c.before)   app.use(c.before)
-  if (c.after)    app.use(function* (next) {
-    yield next
-    yield c.after
+// map of http methods, paths and expected function names
+var routes = [
+  ['get',   '/',          'index'],
+  ['get',   '/new',       'new'],
+  ['post',  '/',          'create'],
+  ['get',   '/:id',       'read'],
+  ['get',   '/:id/edit',  'edit'],
+  ['put',   '/:id',       'update'],
+  ['del',   '/:id',       'destroy']
+]
+
+// receives an object, typically a required module
+function resource (controller) {
+  var list = []
+
+  // before hook
+  if (controller.before) {
+    // ensure before list is an array
+    var befores = controller.before
+    if ( ! Array.isArray(before)) {
+      befores = [befores]
+    }
+
+    // push everything onto the middleware stack
+    befores.forEach(function (before) {
+      assert(isLegal(before), 'The function must be a GeneratorFunction.')
+      list.push(before)
+    })
+  }
+
+  // resource routes
+  routes.forEach(function (def) {
+    var handler = _[def[0]]
+    var route = def[1]
+    var name = def[2]
+    var fn = controller[name]
+
+    // push onto the middleware stack
+    assert(isLegal(fn), 'The function must be a GeneratorFunction.')
+    list.push(handler(route, fn))
   })
 
-  // Attach standard routes
-  if (c.index)    app.use(_.get('/', c.index))
-  if (c.new)      app.use(_.get('/new', c.new))
-  if (c.create)   app.use(_.post('/', c.create))
-  if (c.read)     app.use(_.get('/:id', c.read))
-  if (c.edit)     app.use(_.get('/:id/edit', c.edit))
-  if (c.update)   app.use(_.put('/:id', c.update))
-  if (c.destroy)  app.use(_.del('/:id', c.destroy))
+  // compose a single middleware for the list
+  return compose(list)
+}
 
-  // Run optional function to attach other stuff
-  if (fn)         fn(app, c)
+/**************************** HELPER FUNCTIONS ********************************/
 
-  return app
+function isLegal (fn) {
+  return typeof fn == 'function' && 'GeneratorFunction' == fn.constructor.name
 }
