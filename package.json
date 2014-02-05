@@ -5,6 +5,14 @@
   "main": "index.js",
   "author": "Stephen Belanger <admin@stephenbelanger.com>",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Qard/koa-resource/issues"
+  },
+  "homepage": "https://github.com/Qard/koa-resource",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Qard/koa-resource.git"
+  },
   "dependencies": {
     "koa-route": "~1.0.2",
     "koa-compose": "~2.1.0"
