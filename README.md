@@ -4,21 +4,25 @@ koa-resource provides a similar pattern to what Rails resources use for matching
 
 ## Install
 
-    npm install koa-resource
+```
+npm install koa-resource
+```
 
 ## Usage
-    
-    var users = resource({
-      create: function *() {
-        yield User.create({ ... })
-        this.body = { result: 'success' }
-      },
-      read: function *() {
-        this.body = yield User.find({ _id: this.params.id })
-      }
-    })
 
-    app.use(mount('/users', users))
+```javascript
+var users = resource({
+  create: function *() {
+    yield User.create({ ... })
+    this.body = { result: 'success' }
+  },
+  show: function *() {
+    this.body = yield User.find({ _id: this.params.id })
+  }
+});
+
+app.use(mount('/users', users));
+```
 
 ## Reference table
 
@@ -27,7 +31,7 @@ koa-resource provides a similar pattern to what Rails resources use for matching
 | GET       | /         | index   |
 | GET       | /new      | new     |
 | POST      | /         | create  |
-| GET       | /:id      | read    |
+| GET       | /:id      | show    |
 | GET       | /:id/edit | edit    |
 | PUT       | /:id      | update  |
 | DELETE    | /:id      | destroy |
