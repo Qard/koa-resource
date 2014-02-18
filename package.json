@@ -1,6 +1,6 @@
 {
   "name": "koa-resource",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Resource routing for koa, similar to Rails resources",
   "main": "index.js",
   "author": "Stephen Belanger <admin@stephenbelanger.com>",
@@ -19,5 +19,15 @@
   },
   "peerDependencies": {
     "koa": "0.x"
+  },
+  "devDependencies": {
+    "should": "~3.1.2",
+    "mocha": "~1.17.1",
+    "supertest": "~0.9.0",
+    "co-mocha": "0.0.1",
+    "koa": "~0.4.0"
+  },
+  "scripts": {
+    "test": "mocha --harmony"
   }
 }

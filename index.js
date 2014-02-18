@@ -12,7 +12,7 @@ var isLegal = function (fn) {
 }
 
 /**
- * Map of typical HTTP methods , paths and controller methods.
+ * Map of typical HTTP methods, paths and controller methods.
  *
  * @type {Array}
  */
@@ -50,15 +50,29 @@ module.exports = function (controller) {
     })
   }
 
+  // Add the route handlers for each method
   routes.forEach(function (def) {
     var handler = route[def[0]]
-    var fn      = controller[def[2]]
+    var fns     = controller[def[2]]
     var path    = def[1]
 
-    if (fn) {
-      assert(isLegal(fn), 'The function must be a GeneratorFunction.')
-      list.push(handler(path, fn))
+    // Skip if there's no handlers
+    if (typeof fns === 'undefined') {
+      return
     }
+
+    // Support arrays, like before hooks
+    if ( ! Array.isArray(fns)) {
+      fns = [fns]
+    }
+
+    // Validate handlers
+    fns.forEach(function (fn) {
+      assert(isLegal(fn), 'The function must be a GeneratorFunction.')
+    })
+
+    // Compose
+    list.push(handler(path, compose(fns)))
   })
 
   // Compose a single middleware for the list.
