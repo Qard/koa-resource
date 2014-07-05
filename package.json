@@ -1,6 +1,6 @@
 {
   "name": "koa-resource",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Resource routing for koa, similar to Rails resources",
   "main": "index.js",
   "author": "Stephen Belanger <admin@stephenbelanger.com>",

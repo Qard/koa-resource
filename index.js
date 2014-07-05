@@ -33,7 +33,8 @@ var routes = [
  * @param  {Object}            controller
  * @return {GeneratorFunction}
  */
-module.exports = function (controller) {
+module.exports = function (controller, options) {
+  options = options || {}
   var list = []
 
   // Enable functions to be run before the route starts.
@@ -55,6 +56,11 @@ module.exports = function (controller) {
     var handler = route[def[0]]
     var fns     = controller[def[2]]
     var path    = def[1]
+
+    // Allow custom ids, which are useful for nesting
+    if (options.id) {
+      path = path.replace(':id', ':' + options.id)
+    }
 
     // Skip if there's no handlers
     if (typeof fns === 'undefined') {
