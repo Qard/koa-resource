@@ -1,6 +1,10 @@
 var assert  = require('assert')
-var route   = require('koa-route')
 var compose = require('koa-compose')
+var method = require('koa-method-match')
+var mount = require('koa-path-mount')
+var route = require('koa-path')()
+
+module.exports = resource
 
 /**
  * Check whether a given function is a generator.
@@ -33,15 +37,16 @@ var routes = [
  * @param  {Object}            controller
  * @return {GeneratorFunction}
  */
-module.exports = function (controller, options) {
+function resource (controller, options) {
   options = options || {}
+  options.id = options.id || 'id'
   var list = []
 
   // Enable functions to be run before the route starts.
   if (controller.before) {
     var befores = controller.before || []
 
-    if (!Array.isArray(befores)) {
+    if ( ! Array.isArray(befores)) {
       befores = [befores]
     }
 
@@ -51,16 +56,22 @@ module.exports = function (controller, options) {
     })
   }
 
+  // Attach any nested controllers
+  if (options.nested) {
+    Object.keys(options.nested).forEach(function (path) {
+      var resource = options.nested[path]
+      path = path.replace(/^\//, '')
+      list.push(mount('/:' + options.id + '/' + path, resource))
+    })
+  }
+
   // Add the route handlers for each method
   routes.forEach(function (def) {
-    var handler = route[def[0]]
     var fns     = controller[def[2]]
     var path    = def[1]
 
     // Allow custom ids, which are useful for nesting
-    if (options.id) {
-      path = path.replace(':id', ':' + options.id)
-    }
+    path = path.replace(':id', ':' + options.id)
 
     // Skip if there's no handlers
     if (typeof fns === 'undefined') {
@@ -77,10 +88,16 @@ module.exports = function (controller, options) {
       assert(isLegal(fn), 'The function must be a GeneratorFunction.')
     })
 
-    // Compose
-    list.push(handler(path, compose(fns)))
+    // Generate handler
+    var handler = compose(fns)
+
+    // Generate method and path scoped handler
+    var scoped = method(def[0], route(path, handler))
+
+    // Push it to the stack
+    list.push(scoped)
   })
 
-  // Compose a single middleware for the list.
+  // Compose a single middleware for the controller
   return compose(list)
 }
