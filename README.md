@@ -1,5 +1,7 @@
 # koa-resource
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/Qard/koa-resource.svg)](https://greenkeeper.io/)
+
 koa-resource provides a similar pattern to what Rails resources use for matching functions to routes. It returns a self-contained koa app that can be mounted wherever you like. It also includes basic before hooks to manipulate any request within the controller.
 
 ## Install
